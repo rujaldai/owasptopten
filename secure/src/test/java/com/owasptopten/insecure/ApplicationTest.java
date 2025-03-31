@@ -1,5 +1,6 @@
 package com.owasptopten.insecure;
 
+import com.owasptopten.secure.Application;
 import org.junit.jupiter.api.Test;
 
 class ApplicationTest {
