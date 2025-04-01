@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,10 +47,13 @@ public class UserDetailService {
         return user;
     }
 
-    public UserDetailDto updateUserDetail(User user) {
-        return userRepository.findById(user.getId())
-                .map(existingUser -> validateDuplicateUsername(existingUser, user))
-                .map(existingUser -> existingUser.update(existingUser, user, passwordEncoder))
+    public UserDetailDto updateUserDetail(User loggedInUser, User userBeingUpdated) {
+        if (!loggedInUser.isAdmin()) {
+            userBeingUpdated.setRoles(Collections.emptyList());
+        }
+        return userRepository.findById(userBeingUpdated.getId())
+                .map(existingUser -> validateDuplicateUsername(existingUser, userBeingUpdated))
+                .map(existingUser -> existingUser.update(existingUser, userBeingUpdated, passwordEncoder))
                 .map(userRepository::save)
                 .map(UserDetailDto::of)
                 .orElseThrow(UserDetailException::notFound);
