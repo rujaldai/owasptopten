@@ -1,11 +1,15 @@
 package com.owasptopten.secure.security.config;
 
 import com.owasptopten.secure.security.authentication.service.AuthenticationService;
+import com.owasptopten.secure.security.authorization.CustomPermissionEvaluator;
 import com.owasptopten.secure.userdetails.repository.UserRepository;
+import com.owasptopten.secure.userdetails.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -61,11 +65,10 @@ public class SecurityConfig {
         return new ProviderManager(authenticationProvider);
     }
 
-//    @Bean
-//    FilterRegistrationBean<AuthenticationFilter> authenticationFilter(AuthenticationService authenticationService) {
-//        FilterRegistrationBean<AuthenticationFilter> filterRegistrationBean = new FilterRegistrationBean<>();
-//        filterRegistrationBean.setFilter(new AuthenticationFilter(authenticationService));
-//        filterRegistrationBean.addUrlPatterns("/api/users/*");
-//        return filterRegistrationBean;
-//    }
+    @Bean
+    MethodSecurityExpressionHandler createExpressionHandler(UserDetailService userDetailService) {
+        DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
+        expressionHandler.setPermissionEvaluator(new CustomPermissionEvaluator(userDetailService));
+        return expressionHandler;
+    }
 }

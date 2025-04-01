@@ -7,6 +7,7 @@ import com.owasptopten.secure.userdetails.service.UserDetailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class UserDetailController {
         return userDetailService.getAllUserDetails();
     }
 
-    @PreAuthorize("hasAuthority(T(com.owasptopten.secure.userdetails.enums.Roles).ADMIN)")
+    @PreAuthorize("hasPermission(#id, 'User', T(com.owasptopten.secure.userdetails.enums.Roles).USER)")
     @GetMapping("/{id}")
     UserDetailDto getUserDetail(@PathVariable Long id) {
         return userDetailService.getUserDetail(id)
@@ -32,15 +33,22 @@ public class UserDetailController {
     }
 
     @PreAuthorize("hasAuthority(T(com.owasptopten.secure.userdetails.enums.Roles).USER)")
+    @GetMapping("/current")
+    UserDetailDto getCurrentUserDetail(@AuthenticationPrincipal User user) {
+        return UserDetailDto.of(user);
+    }
+
+    @PreAuthorize("hasAuthority(T(com.owasptopten.secure.userdetails.enums.Roles).ADMIN)")
     @PostMapping
     UserDetailDto createUserDetail(@RequestBody @Valid UserDetailDto userDetailDto) {
         return userDetailService.createUserDetail(userDetailDto);
     }
 
-    @PreAuthorize("hasAuthority(T(com.owasptopten.secure.userdetails.enums.Roles).USER)")
+    @PreAuthorize("hasPermission(#user.id, 'User', T(com.owasptopten.secure.userdetails.enums.Roles).USER)")
     @PutMapping
-    UserDetailDto updateUserDetail(@RequestBody @Valid User user) {
-        return userDetailService.updateUserDetail(user);
+    UserDetailDto updateUserDetail(@RequestBody @Valid UserDetailDto userDetailDto,
+                                   @AuthenticationPrincipal User loggedInUser) {
+        return userDetailService.updateUserDetail(loggedInUser, userDetailDto);
     }
 
 }

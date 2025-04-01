@@ -17,7 +17,8 @@ public enum ErrorCode {
     INVALID_TOKEN("U403", "Invalid token", HttpStatus.FORBIDDEN),
     INVALID_REQUEST("U400", "Invalid request", HttpStatus.BAD_REQUEST),
     USER_ALREADY_EXISTS("U401", "User already exists", HttpStatus.BAD_REQUEST),
-    INTERNAL_SERVER_ERROR("U500", "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+    INTERNAL_SERVER_ERROR("U500", "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR),
+    UNAUTHORIZED("U401", "Unauthorized", HttpStatus.UNAUTHORIZED);
 
     private final String code;
     private final String message;

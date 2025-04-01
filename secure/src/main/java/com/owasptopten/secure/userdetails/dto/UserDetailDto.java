@@ -8,6 +8,7 @@ import com.owasptopten.secure.userdetails.enums.Roles;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -35,5 +36,9 @@ public record UserDetailDto(Long id,
                 .map(passwordEncoder)
                 .ifPresent(user::setPassword);
         return user;
+    }
+
+    public UserDetailDto getSanitizedInputForNonAdmin() {
+        return new UserDetailDto(this.id, this.username, this.password, Collections.emptyList());
     }
 }
