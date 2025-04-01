@@ -5,7 +5,6 @@ import com.owasptopten.secure.userdetails.domain.User;
 import com.owasptopten.secure.userdetails.dto.UserDetailDto;
 import com.owasptopten.secure.userdetails.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,24 +39,22 @@ public class UserDetailService {
         return UserDetailDto.of(user);
     }
 
-    private User updateUser(User user, UserDetailDto userDetailUpdateRequest) {
-        User updateRequest = userDetailUpdateRequest.toUser(passwordEncoder::encode);
-        BeanUtils.copyProperties(updateRequest, user, "id");
-        return user;
-    }
-
-    public UserDetailDto updateUserDetail(User user) {
-        return userRepository.findById(user.getId())
-                .map(existingUser -> validateDuplicateUsername(existingUser, user))
-                .map(existingUser -> existingUser.update(existingUser, user, passwordEncoder))
+    public UserDetailDto updateUserDetail(User loggedInUser, UserDetailDto userBeingUpdated) {
+        if (!loggedInUser.isAdmin()) {
+            userBeingUpdated = userBeingUpdated.getSanitizedInputForNonAdmin();
+        }
+        UserDetailDto finalUserBeingUpdated = userBeingUpdated;
+        return userRepository.findById(userBeingUpdated.id())
+                .map(existingUser -> validateDuplicateUsername(existingUser, finalUserBeingUpdated))
+                .map(existingUser -> existingUser.update(existingUser, finalUserBeingUpdated, passwordEncoder))
                 .map(userRepository::save)
                 .map(UserDetailDto::of)
                 .orElseThrow(UserDetailException::notFound);
     }
 
-    private User validateDuplicateUsername(User existingUser, User user) {
-        if (!existingUser.getUsername().equals(user.getUsername())
-                && userRepository.existsByUsername(user.getUsername())) {
+    private User validateDuplicateUsername(User existingUser, UserDetailDto userBeingUpdated) {
+        if (!existingUser.getUsername().equals(userBeingUpdated.username())
+                && userRepository.existsByUsername(userBeingUpdated.username())) {
             throw UserDetailException.userAlreadyExists();
         }
         return existingUser;

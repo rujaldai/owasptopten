@@ -1,6 +1,7 @@
 package com.owasptopten.secure.userdetails.domain;
 
 import com.owasptopten.secure.helpers.ObjectUtil;
+import com.owasptopten.secure.userdetails.dto.UserDetailDto;
 import com.owasptopten.secure.userdetails.enums.Roles;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -39,14 +40,17 @@ public class User implements UserDetails {
         return List.of(roles.toArray(new Roles[0]));
     }
 
-    public User update(User existingUser, User newUserDetail, PasswordEncoder passwordEncoder) {
-        this.username = ObjectUtil.defaultIfEmpty(newUserDetail.getUsername(), existingUser.username);
-        this.roles = ObjectUtil.defaultIfEmpty(newUserDetail.getRoles(), existingUser.roles);
-        Optional.ofNullable(newUserDetail.getPassword())
+    public User update(User existingUser, UserDetailDto newUserDetail, PasswordEncoder passwordEncoder) {
+        this.username = ObjectUtil.defaultIfEmpty(newUserDetail.username(), existingUser.username);
+        this.roles = ObjectUtil.defaultIfEmpty(newUserDetail.roles(), existingUser.roles);
+        Optional.ofNullable(newUserDetail.password())
                 .map(passwordEncoder::encode)
                 .ifPresent(existingUser::setPassword);
         return this;
     }
 
 
+    public boolean isAdmin() {
+        return this.roles.contains(Roles.ADMIN);
+    }
 }
