@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: owasp top 10
+  datasource:
+    url: jdbc:mysql://localhost:3306/owasptopten
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    minIdle: 5
+    maxPoolSize: 10
+    idleTimeout: 30000
+    max-lifetime: 1800000
+    connection-timeout: 30000
+    auto-commit:  true
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      access: READ_ONLY
+    prometheus:
+      access: READ_ONLY
+    env:
+      show-values: ALWAYS
+  info:
+    env:
+      enabled: true
