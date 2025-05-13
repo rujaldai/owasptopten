@@ -13,6 +13,8 @@ public class Cookies {
         Cookie cookie = new Cookie(name, value);
         cookie.setMaxAge((int) maxDuration.getSeconds());
         cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setAttribute("SameSite", "Lax");
         return cookie;
     }
 

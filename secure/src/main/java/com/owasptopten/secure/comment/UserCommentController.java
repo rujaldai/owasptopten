@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * SQL Injection, XSS & SSRF
  */
-@RestController
+@Controller
 @RequestMapping("/api/users/comments")
 @RequiredArgsConstructor
 public class UserCommentController {
@@ -25,14 +26,16 @@ public class UserCommentController {
 
     @PreAuthorize("hasAuthority(T(com.owasptopten.secure.userdetails.enums.Roles).USER)")
     @PostMapping
-    public void createComment(@RequestBody CommentDto commentDto,
-                              @RequestParam(required = false) boolean internal,
-                              @AuthenticationPrincipal User user) {
+    public String createComment(CommentDto commentDto,
+                                @RequestParam(required = false) boolean internal,
+                                @AuthenticationPrincipal User user) {
         userCommentService.saveComment(Sanitizers.sanitizeHtml(commentDto.comment()), commentDto.imageUrl(), internal, user);
+        return "redirect:/";
     }
 
     @PreAuthorize("hasAuthority(T(com.owasptopten.secure.userdetails.enums.Roles).USER)")
     @GetMapping
+    @ResponseBody
     public List<UserCommentDto> getComments(@RequestParam(required = false) String username,
                                             @AuthenticationPrincipal User user,
                                             Pageable pageable) {

@@ -41,7 +41,7 @@ public class UserDetailService {
 
     public UserDetailDto updateUserDetail(User loggedInUser, UserDetailDto userBeingUpdated) {
         if (!loggedInUser.isAdmin()) {
-            userBeingUpdated = userBeingUpdated.getSanitizedInputForNonAdmin();
+            userBeingUpdated = userBeingUpdated.sanitizedInputForNonAdmin();
         }
         UserDetailDto finalUserBeingUpdated = userBeingUpdated;
         return userRepository.findById(userBeingUpdated.id())

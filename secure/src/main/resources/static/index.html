@@ -10,7 +10,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="/">Insecure OWASP Demo</a>
+            <a class="navbar-brand" href="/">Secure OWASP Demo</a>
             <div class="navbar-nav ms-auto">
                 <span id="userInfo" class="nav-item nav-link"></span>
                 <button id="loginBtn" class="btn btn-outline-light">Login</button>
@@ -43,12 +43,18 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Comments</h5>
-                            <form id="commentForm">
+                            <form id="commentForm" action="/api/users/comments" method="POST">
                                 <div class="mb-3">
-                                    <textarea class="form-control" id="comment" rows="3" required></textarea>
+                                    <label for="comment" class="form-label">Comment</label>
+                                    <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" id="imageUrl" placeholder="Enter image URL (optional)">
+                                    <label for="imageUrl" class="form-label">Image URL (optional)</label>
+                                    <input type="text" class="form-control" id="imageUrl" name="imageUrl" placeholder="Enter image URL">
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="internal" name="internal">
+                                    <label class="form-check-label" for="internal">Internal Comment</label>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Post Comment</button>
                             </form>

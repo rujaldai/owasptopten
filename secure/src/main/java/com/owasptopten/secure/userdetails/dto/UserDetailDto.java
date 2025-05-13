@@ -38,7 +38,7 @@ public record UserDetailDto(Long id,
         return user;
     }
 
-    public UserDetailDto getSanitizedInputForNonAdmin() {
+    public UserDetailDto sanitizedInputForNonAdmin() {
         return new UserDetailDto(this.id, this.username, this.password, Collections.emptyList());
     }
 }

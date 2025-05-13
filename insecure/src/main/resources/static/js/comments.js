@@ -7,7 +7,7 @@ class CommentService {
     }
 
     setupEventListeners() {
-        document.getElementById('commentForm').addEventListener('submit', this.handleCommentSubmit.bind(this));
+//        document.getElementById('commentForm').addEventListener('submit', this.handleCommentSubmit.bind(this));
     }
 
     async handleCommentSubmit(e) {

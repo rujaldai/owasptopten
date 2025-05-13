@@ -71,7 +71,10 @@ public class AuthenticationService {
                 .filter(cookie -> cookie.getName().equals("token"))
                 .map(Cookie::getValue)
                 .findFirst()
-                .ifPresent(tokens::remove);
+                .ifPresent(token -> {
+                    String removedToken = tokens.remove(token);
+                    tokens.remove(removedToken);
+                });
 
         Cookies.removeCookie("token", httpServletResponse);
     }
