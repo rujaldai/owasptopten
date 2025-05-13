@@ -3,6 +3,7 @@ package com.owasptopten.secure.comment;
 import com.owasptopten.secure.comment.dto.CommentDto;
 import com.owasptopten.secure.comment.dto.UserCommentDto;
 import com.owasptopten.secure.comment.service.UserCommentService;
+import com.owasptopten.secure.security.sanitization.Sanitizers;
 import com.owasptopten.secure.userdetails.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +28,7 @@ public class UserCommentController {
     public void createComment(@RequestBody CommentDto commentDto,
                               @RequestParam(required = false) boolean internal,
                               @AuthenticationPrincipal User user) {
-        userCommentService.saveComment(commentDto.comment(), commentDto.imageUrl(), internal, user);
+        userCommentService.saveComment(Sanitizers.sanitizeHtml(commentDto.comment()), commentDto.imageUrl(), internal, user);
     }
 
     @PreAuthorize("hasAuthority(T(com.owasptopten.secure.userdetails.enums.Roles).USER)")
