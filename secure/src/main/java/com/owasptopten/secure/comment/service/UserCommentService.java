@@ -73,9 +73,10 @@ public class UserCommentService {
         return jdbcTemplate.query(
             "SELECT uc.id, u.username, uc.comment, uc.image_url as imageUrl, uc.image_data as imageData, uc.created_at as createdAt " +
             "FROM user u JOIN user_comments uc ON u.id = uc.user_id " +
-            "WHERE uc.internal = ? and u.username = \"" + username + "\" " +
+            "WHERE uc.internal = ? and u.username = ? " +
             "ORDER BY uc.id DESC LIMIT ? OFFSET ?",
             new BeanPropertyRowMapper<>(UserCommentDto.class),
+            username,
             includeInternalComment,
             pageable.getPageSize(),
             pageable.getPageNumber()

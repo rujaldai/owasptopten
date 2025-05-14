@@ -44,7 +44,7 @@ public class UserDetailController {
         return userDetailService.createUserDetail(userDetailDto);
     }
 
-    @PreAuthorize("hasPermission(#user.id, 'User', T(com.owasptopten.secure.userdetails.enums.Roles).USER)")
+    @PreAuthorize("hasPermission(#userDetailDto?.id, 'User', T(com.owasptopten.secure.userdetails.enums.Roles).USER)")
     @PutMapping
     UserDetailDto updateUserDetail(@RequestBody @Valid UserDetailDto userDetailDto,
                                    @AuthenticationPrincipal User loggedInUser) {

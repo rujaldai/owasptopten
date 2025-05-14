@@ -6,7 +6,6 @@ import com.owasptopten.secure.helpers.EmptyRoleDeserializer;
 import com.owasptopten.secure.userdetails.domain.User;
 import com.owasptopten.secure.userdetails.enums.Roles;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.function.Function;
 public record UserDetailDto(Long id,
                             @NotBlank String username,
                             @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-                            @NotBlank @NotNull String password,
+                            String password,
                             @JsonDeserialize(using = EmptyRoleDeserializer.class)
                             List<Roles> roles) {
 

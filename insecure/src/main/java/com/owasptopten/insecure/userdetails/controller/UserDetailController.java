@@ -4,6 +4,7 @@ import com.owasptopten.insecure.errorhandling.enums.ErrorCode;
 import com.owasptopten.insecure.errorhandling.exceptions.UserDetailException;
 import com.owasptopten.insecure.userdetails.domain.User;
 import com.owasptopten.insecure.userdetails.dto.UserDetailDto;
+import com.owasptopten.insecure.userdetails.enums.Roles;
 import com.owasptopten.insecure.userdetails.service.UserDetailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,7 @@ public class UserDetailController {
     @PutMapping
     UserDetailDto updateUserDetail(@RequestBody @Valid User user,
                                    @AuthenticationPrincipal User loggedInUser) {
-        if (!loggedInUser.getId().equals(user.getId())) {
+        if (!loggedInUser.getId().equals(user.getId()) && !loggedInUser.getRoles().contains(Roles.ADMIN)) {
             throw new UserDetailException(ErrorCode.UNAUTHORIZED);
         }
         return userDetailService.updateUserDetail(user);

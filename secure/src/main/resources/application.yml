@@ -33,3 +33,6 @@ management:
   info:
     env:
       enabled: true
+
+server:
+  port: 8081
