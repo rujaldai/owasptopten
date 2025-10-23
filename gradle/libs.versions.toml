@@ -18,6 +18,7 @@ junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher
 
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok-version" }
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson-core-version" }
+jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson-core-version" }
 
 [bundles]
 project-basic = [
@@ -29,5 +30,6 @@ project-basic = [
     "spring-boot-starter-actuator",
     "micrometer-registry-prometheus",
     "junit-platform-launcher",
-    "jackson-core"
+    "jackson-core",
+    "jackson-datatype-jsr310"
 ]
